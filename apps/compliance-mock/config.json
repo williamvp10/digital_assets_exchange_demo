@@ -1,0 +1,6 @@
+{
+  "lowBelow": "1000",
+  "mediumThrough": "5000",
+  "forceFailure": false,
+  "delayMs": 0
+}

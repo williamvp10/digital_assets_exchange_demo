@@ -1,0 +1,34 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: database/Dockerfile
+    environment:
+      POSTGRES_USER: sandbox
+      POSTGRES_PASSWORD: sandbox
+      POSTGRES_DB: assets
+    ports: ["127.0.0.1:55432:5432"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sandbox -d assets"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  compliance-mock:
+    build: .
+    command: npm run mock
+    ports: ["127.0.0.1:3101:3101"]
+  api:
+    build: .
+    command: sh -c "npm run db:init && npm run db:seed && npm run start -w apps/api"
+    environment:
+      DATABASE_URL: postgresql://sandbox:sandbox@postgres:5432/assets
+      COMPLIANCE_URL: http://compliance-mock:3101
+      PORT: 3100
+    ports: ["127.0.0.1:3100:3100"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      compliance-mock: {condition: service_started}
+volumes:
+  postgres-data:

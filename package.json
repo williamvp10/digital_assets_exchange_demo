@@ -1,0 +1,28 @@
+{
+  "name": "plataforma-activos",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/api",
+    "apps/compliance-mock"
+  ],
+  "scripts": {
+    "build": "npm run build -w apps/api",
+    "start:dev": "npm run start:dev -w apps/api",
+    "mock": "npm run start -w apps/compliance-mock",
+    "db:seed": "npm run db:seed -w apps/api",
+    "test": "npm run test -w apps/api",
+    "test:e2e": "npm run test:e2e -w apps/api",
+    "up": "docker compose up --build -d",
+    "down": "docker compose down",
+    "format": "prettier --write \"apps/api/src/**/*.ts\" \"apps/api/test/**/*.ts\"",
+    "format:check": "prettier --check \"apps/api/src/**/*.ts\" \"apps/api/test/**/*.ts\"",
+    "db:init": "npm run db:init -w apps/api"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
+}
